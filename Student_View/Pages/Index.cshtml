@@ -4,7 +4,22 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@using Student_View.Entity
+@inject Context context
+
+<h3>Studenter</h3>
+
+<ul>
+	@foreach (Student student in context.Students)
+	{
+		<li>
+			@student.Studentname
+			<ul>
+				<li>Alder: @student.Studentage</li>
+				@foreach (Grade g in student.Grades){
+					<li>@g.Grade1</li>
+				}
+			</ul>
+		</li>
+	}
+</ul>
