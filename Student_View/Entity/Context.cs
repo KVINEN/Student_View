@@ -108,5 +108,16 @@ namespace Student_View.Entity
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public string writeAllStud()
+        {
+            string s = "<ul>";
+
+            Students.Include(a => a.Grades).ToList().ForEach(stud => {
+                s += stud.write();
+            });
+
+            return s + "</ul>";
+        }
     }
 }

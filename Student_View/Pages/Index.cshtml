@@ -2,22 +2,26 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+
+
 }
 
+@using Microsoft.EntityFrameworkCore
 @using Student_View.Entity
 @inject Context context
 
 <h3>Studenter</h3>
 
 <ul>
-	@foreach (Student student in context.Students)
-	{
+
+    @foreach (Student student in context.Students.Include( s => s.Grades ))
+    {
 		<li>
 			@student.Studentname
 			<ul>
 				<li>Alder: @student.Studentage</li>
 				@foreach (Grade g in student.Grades){
-					<li>@g.Grade1</li>
+					<li> @g.Coursecode  :  @g.Grade1</li>
 				}
 			</ul>
 		</li>
