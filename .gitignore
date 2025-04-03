@@ -4,3 +4,7 @@ vs
 vs/
 Debug
 Debug/
+obj/
+obj
+bin
+bin/
