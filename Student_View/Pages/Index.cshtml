@@ -2,28 +2,28 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
-
-
 }
-
-@using Microsoft.EntityFrameworkCore
-@using Student_View.Entity
-@inject Context context
 
 <h3>Studenter</h3>
 
-<ul>
+<form method="get">
+    <input type="text" name="Sok" value="@Model.Sok" placeholder="Søk student..." />
+    <button type="submit">Søk</button>
+</form>
 
-    @foreach (Student student in context.Students.Include( s => s.Grades ))
+<ul>
+    @foreach (var stud in Model.AllStudents)
     {
-		<li>
-			@student.Studentname
-			<ul>
-				<li>Alder: @student.Studentage</li>
-				@foreach (Grade g in student.Grades){
-					<li> @g.Coursecode  :  @g.Grade1</li>
-				}
-			</ul>
-		</li>
-	}
+        <li>
+            @stud.Studentname
+            <ul>
+                <li>Alder: @stud.Studentage</li>
+                @foreach (var g in stud.Grades)
+                {
+                    <li> @g.Coursecode : @g.Grade1</li>
+                }
+            </ul>
+        </li>
+    }
 </ul>
+
