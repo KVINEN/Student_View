@@ -10,6 +10,6 @@ bin
 bin/
 appsettings.json
 appsettings.json/
-appsettings.development.json/
-appsettings.development.json/
+appsettings.Development.json/
+appsettings.Development.json/
 
