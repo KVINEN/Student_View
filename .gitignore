@@ -9,7 +9,5 @@ obj
 bin
 bin/
 appsettings.json
-appsettings.json/
-appsettings.Development.json/
-appsettings.Development.json/
+appsettings.Development.json
 
