@@ -8,3 +8,6 @@ obj/
 obj
 bin
 bin/
+appsettings.json
+appsettings.json/
+
