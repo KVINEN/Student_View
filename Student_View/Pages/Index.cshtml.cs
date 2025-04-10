@@ -21,6 +21,9 @@ namespace Student_View.Pages
         [BindProperty(SupportsGet = true)]
         public string? SelectedCourse { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public bool ShowFailed { get; set; }
+
         public void OnGet()
         {
             AllCourses = _context.Courses.ToList();
@@ -37,6 +40,11 @@ namespace Student_View.Pages
             if (!string.IsNullOrEmpty(SelectedCourse))
             {
                 studentQuery = studentQuery.Where(s => s.Grades.Any(g => g.Coursecode == SelectedCourse));
+            }
+
+            if(ShowFailed)
+            {
+                studentQuery = studentQuery.Where(s => s.Grades.Any(g => g.Grade1 == "F"));
             }
 
             AllStudents = studentQuery.ToList();

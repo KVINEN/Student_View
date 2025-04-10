@@ -8,7 +8,6 @@
 
 <form method="get">
     <input type="text" name="Sok" value="@Model.Sok" placeholder="Søk student..." />
-    <button type="submit">Søk</button>
     <div class="dropdown">
         <label for="SelectedCourse">Sorter etter kurs:</label>
         <select id="SelectedCourse" name="SelectedCourse">
@@ -20,35 +19,54 @@
                 </option>
             }
         </select>
-        <button type="submit">Filtrer</button> 
     </div>
+    <div>
+        <label>
+            <input type="checkbox" name="ShowFailed" value="true" @(Model.ShowFailed ? "checked" : "") />
+            Vis kun studenter med F i et/flere fag
+        </label>
+    </div>
+    <button type="submit">Filtrer</button>
 </form>
 
 <ul>
     @foreach (var stud in Model.AllStudents)
     {
-        <li>
-            @stud.Studentname
-            <ul>
-                <li>Alder: @stud.Studentage</li>
 
-                @if (!string.IsNullOrEmpty(Model.SelectedCourse))
-                {
-                    var selectedGrade = stud.Grades.FirstOrDefault(g => g.Coursecode == Model.SelectedCourse);
-                    if (selectedGrade != null)
+        var failedGrades = stud.Grades.Where(g => g.Grade1 == "F").ToList();
+
+        if (!Model.ShowFailed || failedGrades.Any())
+        {
+            <li>
+                @stud.Studentname
+                <ul>
+                    <li>Alder: @stud.Studentage</li>
+
+                    @if (!string.IsNullOrEmpty(Model.SelectedCourse))
                     {
-                        <li>@selectedGrade.Coursecode : @selectedGrade.Grade1</li>
+                        var selectedGrade = stud.Grades.FirstOrDefault(g => g.Coursecode == Model.SelectedCourse);
+                        if (selectedGrade != null)
+                        {
+                            <li>@selectedGrade.Coursecode : @selectedGrade.Grade1</li>
+                        }
                     }
-                }
-                else
-                {
-                    @foreach (var g in stud.Grades)
+                    else if (Model.ShowFailed)
                     {
-                        <li>@g.Coursecode : @g.Grade1</li>
+                        @foreach (var g in failedGrades)
+                        {
+                            <li>@g.Coursecode : @g.Grade1</li>
+                        }
                     }
-                }
-            </ul>
-        </li>
+                    else
+                    {
+                        @foreach (var g in stud.Grades)
+                        {
+                            <li>@g.Coursecode : @g.Grade1</li>
+                        }
+                    }
+                </ul>
+            </li>
+        }
     }
 </ul>
 
