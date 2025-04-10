@@ -9,6 +9,19 @@
 <form method="get">
     <input type="text" name="Sok" value="@Model.Sok" placeholder="Søk student..." />
     <button type="submit">Søk</button>
+    <div class="dropdown">
+        <label for="SelectedCourse">Sorter etter kurs:</label>
+        <select id="SelectedCourse" name="SelectedCourse">
+            <option value="">Velg kurs</option>
+            @foreach (var c in Model.AllCourses)
+            {
+                <option value="@c.Coursecode" selected="@(c.Coursecode == Model.SelectedCourse ? "selected" : null)">
+                    @c.Coursename (@c.Coursecode)
+                </option>
+            }
+        </select>
+        <button type="submit">Filtrer</button> 
+    </div>
 </form>
 
 <ul>
@@ -18,9 +31,21 @@
             @stud.Studentname
             <ul>
                 <li>Alder: @stud.Studentage</li>
-                @foreach (var g in stud.Grades)
+
+                @if (!string.IsNullOrEmpty(Model.SelectedCourse))
                 {
-                    <li> @g.Coursecode : @g.Grade1</li>
+                    var selectedGrade = stud.Grades.FirstOrDefault(g => g.Coursecode == Model.SelectedCourse);
+                    if (selectedGrade != null)
+                    {
+                        <li>@selectedGrade.Coursecode : @selectedGrade.Grade1</li>
+                    }
+                }
+                else
+                {
+                    @foreach (var g in stud.Grades)
+                    {
+                        <li>@g.Coursecode : @g.Grade1</li>
+                    }
                 }
             </ul>
         </li>

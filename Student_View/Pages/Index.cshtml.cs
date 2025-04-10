@@ -13,24 +13,33 @@ namespace Student_View.Pages
             _context = context;
         }
         public List<Student> AllStudents { get; set; } = new();
+        public List<Course> AllCourses { get; set; } = new();
 
         [BindProperty (SupportsGet = true)]
         public string? Sok { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? SelectedCourse { get; set; }
+
         public void OnGet()
         {
-            if(!string.IsNullOrEmpty(Sok))
+            AllCourses = _context.Courses.ToList();
+
+            var studentQuery = _context.Students
+                .Include(s => s.Grades)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(Sok))
             {
-                AllStudents = _context.Students
-                    .Where(s => s.Studentname.Contains(Sok))
-                    .Include(s => s.Grades)
-                    .ToList();
+                studentQuery = studentQuery.Where(s => s.Studentname.Contains(Sok));
             }
-            else
+
+            if (!string.IsNullOrEmpty(SelectedCourse))
             {
-                AllStudents = _context.Students
-                    .Include(s => s.Grades)
-                    .ToList();
+                studentQuery = studentQuery.Where(s => s.Grades.Any(g => g.Coursecode == SelectedCourse));
             }
+
+            AllStudents = studentQuery.ToList();
         }
     }
 }
